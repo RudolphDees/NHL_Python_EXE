@@ -3,7 +3,7 @@ import os
 
 class Cache:
     def __init__(self, filename: str):
-        self.filename = filename
+        self.filename = "cache/" + filename
         self.cache = self.load_cache()
 
     def load_cache(self):

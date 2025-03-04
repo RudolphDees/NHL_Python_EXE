@@ -1,9 +1,7 @@
-from datetime import datetime
-from action import Action
-from team import Team
+from .team import Team
 
 class Game:
-    def __init__(self, game_id: str, home_team: Team, away_team: Team, venue: str, game_date: datetime, actions: list = None):
+    def __init__(self, game_id: str, home_team: Team, away_team: Team, venue: str, game_date: str, actions: list = None):
         """
         :param game_id: Unique identifier for the game
         :param home_team: Name of the home team

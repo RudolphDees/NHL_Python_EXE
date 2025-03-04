@@ -1,6 +1,6 @@
 from datetime import datetime
-from team import Team
-from player import Player
+from .team import Team
+from .player import Player
 
 class Action:
     def __init__(self, action_type: str, player: Player, team: Team, location: tuple, game_id: str, timestamp: datetime):
