@@ -1,10 +1,10 @@
 import sys
 import mysql.connector
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QComboBox, QLabel, QTableWidget, QTableWidgetItem
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QComboBox, QLabel, QTableWidget, QTableWidgetItem, QHBoxLayout, QPushButton, QToolBar, QMenuBar, QMainWindow
+from PyQt6.QtGui import QAction
+from get_player_stats_from_current_rosters import extract_roster_data
 
-
-
-class TeamSelector(QWidget):
+class TeamSelector(QMainWindow):
     def __init__(self):
         super().__init__()
         self.init_ui()
@@ -14,8 +14,15 @@ class TeamSelector(QWidget):
         self.setWindowTitle('Team Selector')
         self.setGeometry(100, 100, 600, 400)
 
-        # Create a QVBoxLayout to hold the widgets
+        # Create a central widget
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+
+        # Create a layout for the central widget
         layout = QVBoxLayout()
+
+        # Create the menu bar with a "View" menu and "Refresh" action
+        self.create_menu_bar()
 
         # Create a label to display the selected team
         self.label = QLabel("Select a Team", self)
@@ -37,8 +44,18 @@ class TeamSelector(QWidget):
         self.table_widget = QTableWidget(self)
         layout.addWidget(self.table_widget)
 
-        # Set the layout for the window
-        self.setLayout(layout)
+        # Set the layout of the central widget
+        central_widget.setLayout(layout)
+
+    def create_menu_bar(self):
+        # Create the menu bar automatically via QMainWindow
+        menu_bar = self.menuBar()
+
+        # Add a "View" menu with a "Refresh" action
+        view_menu = menu_bar.addMenu("Options")
+        refresh_action = QAction("Refresh Players", self)
+        refresh_action.triggered.connect(self.on_refresh_clicked)
+        view_menu.addAction(refresh_action)
 
     def load_teams_from_database(self):
         try:
@@ -97,6 +114,15 @@ class TeamSelector(QWidget):
 
         except mysql.connector.Error as err:
             print(f"Error: {err}")
+
+    def on_refresh_clicked(self):
+        # Placeholder for refresh button logic
+        print("Refresh button clicked!")
+        self.combo_box.clear()  # Clear the combo box items
+        self.load_teams_from_database()  # Reload teams from the database
+        self.table_widget.clear()  # Clear the table
+        extract_roster_data()
+        print("Teams and table refreshed!")  # Optional: for debugging
 
 def connect_to_mysql():
     conn = mysql.connector.connect(
